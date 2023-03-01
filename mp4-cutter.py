@@ -1,22 +1,34 @@
-import glob
-import os
+import glob, os
 from tkinter import filedialog as fd
 from multiprocessing.pool import ThreadPool
+
 def getFolder() -> str:
     name = fd.askdirectory(initialdir="~/")
     return name
 
 def main():
     directory = getFolder()
+    directory.replace(" ","\\ ")
     os.chdir(directory)
     files =  glob.glob("*.mp4")
-    files = [f.replace(" ", "\\ ") for f in files]
+     
+    print(f"Directory:\n{directory}")
     
-    print(files) 
     
+    
+    if len(files) == 0 or files is None:
+        print("No mp4 files in this folder\nExiting")
+        return None
+    
+    print(f"Files:")
+    print(files)
+    for f in files:
+        print(f)
+
     if input("Do you want to convert these files [Y/n]") != "Y":
         return
     
+    files = [f.replace(" ", "\\ ") for f in files]
     with ThreadPool(processes=4) as pool:
         # call the function for each item concurrently, get results as tasks complete
         for result in pool.imap(converter, files):
@@ -28,7 +40,7 @@ def converter(file):
         run_command(cmd)
         os.system(f"rm {file}")
     except:
-        print("An error occured for file " + file)
+        raise SystemError("An error occured when converting file" + file)
     
     return file + " converted succesfully"
     
