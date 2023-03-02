@@ -22,7 +22,7 @@ def converter(file:str) -> str:
     cmd = get_command(file)
     try:
         run_command(cmd)
-        os.system(f"rm {file}")
+        os.system(f"rm {file}_edit.mp4")
     except:
         raise SystemError("An error occured when converting file" + file)
     
