@@ -9,6 +9,7 @@ def getFolder() -> str:
     """
     directory = fd.askdirectory(initialdir="~/")
     directory.replace(" ","\\ ")
+    directory += "/"
     print(directory)
     return directory
 
@@ -42,7 +43,8 @@ def run_command(cmd:str):
 def get_files(directory:str) -> list:
     """Returns a list of filenames given the directory path as a strings"""
     os.chdir(directory)
-    files = glob.glob("*,mp4")
+    files = glob.glob("*.mp4")
+    print(files)
 
     if files is None or len(files) == 0:
         raise FileNotFoundError(f"No mp4 files in the directory {directory}")  
