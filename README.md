@@ -1,5 +1,5 @@
 # autoeditor-autorun-script
-Python auto editor and ffmpeg script for cutting silence out of videos
+Python batch script using auto editor and ffmpeg for cutting silence out of videos<br>
 My specific use case is for lectures
 
 # Requirements:
