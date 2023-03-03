@@ -22,7 +22,7 @@ def converter(file:str) -> str:
     cmd = get_command(file)
     try:
         run_command(cmd)
-        os.system(f"rm {file}_edit.mp4")
+        os.system(f"rm {get_filename(file)}_edit.mp4")
     except:
         raise SystemError("An error occured when converting file" + file)
     
@@ -32,7 +32,8 @@ def get_command(file:str)->str:
     """
     Gets str for appropriate command for ffmpeg and auto editor given the file
     """
-    return f"ffmpeg -i {file} -c:v libx264 {file}_edit.mp4 && auto-editor {file}_edit.mp4 --no-open"
+    filename = get_filename(file)
+    return f"ffmpeg -i {file} -c:v libx264 {filename}_edit.mp4 && auto-editor {filename}_edit.mp4 --no-open"
 
 def run_command(cmd:str):
     """
@@ -44,7 +45,6 @@ def get_files(directory:str) -> list:
     """Returns a list of filenames given the directory path as a strings"""
     os.chdir(directory)
     files = glob.glob("*.mp4")
-    print(files)
 
     if files is None or len(files) == 0:
         raise FileNotFoundError(f"No mp4 files in the directory {directory}")  
@@ -56,6 +56,10 @@ def get_files(directory:str) -> list:
     files = [f.replace(" ", "\\ ") for f in files]
 
     return files
+
+
+def get_filename(file):
+    return file.split(".")[0]
 
 def main():
     directory = getFolder()
