@@ -1,38 +1,46 @@
 import glob
 from os import chdir
+from tkinter import filedialog as fd
 
 
 class File_Handler:
     def __init__(self, directory="~/"):
-        self.change_directory(directory)
-        self.files = None
-        self.filenames = None
+        chdir(directory)
 
-    def refresh_files(self):
         self.files = glob.glob("*.mp4")
+        
+        self.filenames = [file.split(".")[0] for file in self.files]
+        self.pretty_print = "Files:"
+        for f in self.filenames:
+            self.pretty_print += f"\n{f}"
+        
+        self.files = [f.replace(" ", "\\ ") for f in self.files]
+        self.filenames = [file.split(".")[0] for file in self.files]
+
+
 
     def get_files(self):
-        return [f.replace(" ", "\\") for f in self.files]
+        return self.files
 
-    def refresh_filenames(self):
-        self.filenames = [file.split(".")[0] for file in self.files]
 
     def get_filenames(self):
         return self.filenames
 
-    @staticmethod
-    def change_directory(directory):
-        chdir(directory)
-
     def __str__(self):
-        self.refresh_filenames()
-        val = "Files:"
-        for f in self.filenames:
-            f"\n{f}"
-        return val
+        return self.pretty_print
 
     def __len__(self):
-        self.refresh_files()
         if self.files is None:
             return 0
         return len(self.files)
+
+    def __getitem__(self, item: int):
+        files = self.get_files()
+        return files[item]
+
+def ask_directory_gui():
+    return fd.askdirectory(initialdir="~/")
+
+def ask_directory_cmd():
+    return input("Please enter the path to the directory with your files in:\n")
+
